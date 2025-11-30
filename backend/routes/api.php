@@ -17,6 +17,10 @@ Route::get('/memories', [MemoryController::class, 'index']);
 Route::post('/memories/{id}/feature', [MemoryController::class, 'toggleFeature']);
 Route::delete('/memories/{id}', [MemoryController::class, 'destroy']);
 
+// Galerie d'un souvenir spécifique
+Route::get('/memories/{id}/gallery', [MemoryController::class, 'getGallery']);
+Route::post('/memories/{id}/gallery', [MemoryController::class, 'addToGallery']);
+
 // ÉTAPE 2 : Timeline
 Route::get('/timeline', [MemoryController::class, 'timeline']);
 Route::post('/generate-timeline', [MemoryController::class, 'generateTimeline']); // Mock IA

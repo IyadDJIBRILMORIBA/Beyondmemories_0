@@ -15,28 +15,33 @@ class Memory extends Model
         'type',
         'taken_at',
         'is_featured',
+        'name',
+        'description',
+        'parent_id',
     ];
 
     protected $casts = [
-        'taken_at' => 'date',
+        'taken_at' => 'datetime',
         'is_featured' => 'boolean',
     ];
 
-    // Relation avec User
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    protected $appends = ['url'];
 
-    // Scope pour récupérer uniquement les souvenirs "featured" (timeline)
-    public function scopeFeatured($query)
-    {
-        return $query->where('is_featured', true)->orderBy('taken_at', 'asc');
-    }
-
-    // Accessor pour obtenir l'URL complète du fichier
     public function getUrlAttribute()
     {
-        return asset('storage/' . $this->path);
+        // CHANGEMENT ICI : Utiliser la route web.php au lieu de asset()
+        return url('/storage/' . $this->path);
+    }
+
+    // Relation pour la galerie
+    public function gallery()
+    {
+        return $this->hasMany(Memory::class, 'parent_id');
+    }
+
+    // Relation pour le parent
+    public function parent()
+    {
+        return $this->belongsTo(Memory::class, 'parent_id');
     }
 }
