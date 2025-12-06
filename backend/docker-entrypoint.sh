@@ -10,8 +10,13 @@ sleep 2
 mkdir -p /var/www/html/database
 touch /var/www/html/database/database.sqlite
 
+# Ensure storage directories exist
+mkdir -p /var/www/html/storage/app/public/memories
+mkdir -p /var/www/html/storage/logs
+mkdir -p /var/www/html/storage/framework/{sessions,views,cache}
+
 # Set proper permissions
-chown -R www-data:www-data /var/www/html/database
+chown -R www-data:www-data /var/www/html/database /var/www/html/storage
 chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Run migrations
