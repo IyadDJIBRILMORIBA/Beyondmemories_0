@@ -29,6 +29,12 @@ COPY . .
 # Install dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
+# Configure PHP for large uploads
+RUN echo "upload_max_filesize = 100M" >> /usr/local/etc/php/conf.d/uploads.ini && \
+    echo "post_max_size = 100M" >> /usr/local/etc/php/conf.d/uploads.ini && \
+    echo "memory_limit = 256M" >> /usr/local/etc/php/conf.d/uploads.ini && \
+    echo "max_execution_time = 300" >> /usr/local/etc/php/conf.d/uploads.ini
+
 # Create SQLite database directory
 RUN mkdir -p /var/www/html/database && \
     touch /var/www/html/database/database.sqlite && \
