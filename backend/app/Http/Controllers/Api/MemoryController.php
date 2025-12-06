@@ -18,6 +18,8 @@ class MemoryController extends Controller
     {
         try {
             Log::info('📤 Requête upload reçue', [
+                'all_files' => $request->allFiles(),
+                'has_files' => $request->hasFile('files'),
                 'files_count' => $request->hasFile('files') ? count($request->file('files')) : 0,
                 'taken_at' => $request->input('taken_at'),
                 'name' => $request->input('name'),
@@ -30,6 +32,14 @@ class MemoryController extends Controller
                 'name' => 'nullable|string|max:255',
                 'description' => 'nullable|string',
             ]);
+
+            // Vérifier que des fichiers ont été envoyés
+            if (!$request->hasFile('files')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Aucun fichier reçu',
+                ], 422);
+            }
 
             $memories = [];
             $takenAt = $request->input('taken_at');
