@@ -52,7 +52,9 @@ class API {
       
       const response = await fetch(`${API_BASE_URL}/upload`, {
         method: 'POST',
-        body: formData
+        body: formData,
+        credentials: 'include',
+        mode: 'cors'
       });
       
       console.log('📡 Statut réponse:', response.status);
@@ -185,7 +187,12 @@ class API {
       console.log('🔗 URL:', `${API_BASE_URL}/memories/${id}`);
       
       const response = await fetch(`${API_BASE_URL}/memories/${id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        credentials: 'include',
+        mode: 'cors',
+        headers: {
+          'Accept': 'application/json'
+        }
       });
       
       console.log('📡 Statut réponse:', response.status);
