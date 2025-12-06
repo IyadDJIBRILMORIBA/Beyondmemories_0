@@ -15,6 +15,10 @@ mkdir -p /var/www/html/storage/app/public/memories
 mkdir -p /var/www/html/storage/logs
 mkdir -p /var/www/html/storage/framework/{sessions,views,cache}
 
+# Ensure tmp directory has correct permissions for PHP uploads
+mkdir -p /tmp
+chmod 1777 /tmp
+
 # Set proper permissions
 chown -R www-data:www-data /var/www/html/database /var/www/html/storage
 chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
