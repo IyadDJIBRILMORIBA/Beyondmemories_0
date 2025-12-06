@@ -42,19 +42,6 @@ COPY docker/default.conf /etc/nginx/http.d/default.conf
 # Copy supervisor config
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Create .env from production if not exists
-RUN if [ ! -f .env ]; then cp .env.production .env; fi
-
-# Generate application key if needed
-RUN php artisan key:generate --ansi || true
-
-# Run migrations
-RUN php artisan migrate --force || true
-
-# Optimize Laravel
-RUN php artisan config:cache && \
-    php artisan route:cache
-
 EXPOSE 8080
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
