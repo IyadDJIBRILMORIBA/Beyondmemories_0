@@ -45,6 +45,9 @@ RUN mkdir -p /var/www/html/database && \
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/default.conf /etc/nginx/http.d/default.conf
 
+# Copy PHP-FPM config
+COPY docker/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
+
 # Copy supervisor config
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
