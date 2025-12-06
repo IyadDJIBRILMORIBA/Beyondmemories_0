@@ -56,6 +56,7 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [selectedBubbleId, setSelectedBubbleId] = useState<string | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const selectedBubble = bubbles.find(b => b.id === selectedBubbleId);
 
@@ -121,7 +122,9 @@ const App: React.FC = () => {
   };
 
   const handleDeleteBubble = async (id: string) => {
-
+    if (isDeleting) return; // Empêcher les doubles clics
+    
+    setIsDeleting(true);
     try {
       const memoryId = parseInt(id);
       console.log('🗑️ Suppression du souvenir ID:', memoryId);
@@ -133,9 +136,15 @@ const App: React.FC = () => {
         setSelectedBubbleId(null);
         await loadMemories();
       } else {
+        alert('Erreur lors de la suppression');
+        setSelectedBubbleId(null); // Fermer l'overlay même en cas d'erreur
       }
     } catch (error) {
       console.error('❌ Erreur lors de la suppression:', error);
+      alert('Erreur réseau lors de la suppression');
+      setSelectedBubbleId(null); // Fermer l'overlay même en cas d'erreur
+    } finally {
+      setIsDeleting(false);
     }
   };
 

@@ -9,14 +9,16 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Créer l'utilisateur par défaut uniquement s'il n'existe pas
-        User::firstOrCreate(
-            ['email' => 'demo@beyondmemories.com'],
-            [
+        // Créer l'utilisateur par défaut avec ID=1 uniquement s'il n'existe pas
+        if (!User::where('id', 1)->exists()) {
+            User::create([
+                'id' => 1,
                 'name' => 'Demo User',
+                'email' => 'demo@beyondmemories.com',
                 'password' => bcrypt('password'),
-            ]
-        );
+                'email_verified_at' => now(),
+            ]);
+        }
 
         // Lancer le seeder des memories
         $this->call([

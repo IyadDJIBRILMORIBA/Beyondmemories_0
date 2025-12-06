@@ -18,6 +18,14 @@ chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
 echo "📦 Running database migrations..."
 php artisan migrate --force || echo "⚠️ Migrations failed, database might already be initialized"
 
+# Run seeders to create default user
+echo "🌱 Running database seeders..."
+php artisan db:seed --force || echo "⚠️ Seeders failed or already run"
+
+# Create storage symlink
+echo "🔗 Creating storage symlink..."
+php artisan storage:link || echo "⚠️ Symlink already exists"
+
 # Cache config for better performance
 echo "⚡ Optimizing Laravel..."
 php artisan config:cache || true
