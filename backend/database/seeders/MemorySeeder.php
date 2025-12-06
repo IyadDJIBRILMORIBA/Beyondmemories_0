@@ -5,12 +5,18 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Memory;
 use App\Models\Parcel;
+use Illuminate\Support\Facades\Storage;
 
 class MemorySeeder extends Seeder
 {
     public function run(): void
     {
-        // Créer quelques souvenirs de test
+        // Créer le répertoire storage/app/public/memories si nécessaire
+        if (!Storage::disk('public')->exists('memories')) {
+            Storage::disk('public')->makeDirectory('memories');
+        }
+
+        // Créer quelques souvenirs de test avec des images placeholder
         $memories = [
             [
                 'path' => 'memories/demo1.jpg',
@@ -45,6 +51,10 @@ class MemorySeeder extends Seeder
         ];
 
         foreach ($memories as $memory) {
+            // Créer une image placeholder minimale (1x1 pixel PNG transparent)
+            $placeholderPng = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==');
+            Storage::disk('public')->put($memory['path'], $placeholderPng);
+            
             Memory::create(array_merge($memory, ['user_id' => 1]));
         }
 

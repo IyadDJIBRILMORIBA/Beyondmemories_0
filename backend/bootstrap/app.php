@@ -12,7 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->append(\App\Http\Middleware\Cors::class);
+        // Désactiver le middleware CORS par défaut de Laravel
+        $middleware->remove(\Illuminate\Http\Middleware\HandleCors::class);
+        // Utiliser notre middleware CORS custom en priorité
+        $middleware->prepend(\App\Http\Middleware\Cors::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(fn() => true);
