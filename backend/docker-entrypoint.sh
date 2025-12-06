@@ -19,6 +19,15 @@ mkdir -p /var/www/html/storage/framework/{sessions,views,cache}
 mkdir -p /tmp
 chmod 1777 /tmp
 
+# Create Nginx temp directories with correct permissions
+mkdir -p /var/lib/nginx/tmp/client_body
+mkdir -p /var/lib/nginx/tmp/proxy
+mkdir -p /var/lib/nginx/tmp/fastcgi
+mkdir -p /var/lib/nginx/tmp/uwsgi
+mkdir -p /var/lib/nginx/tmp/scgi
+chown -R www-data:www-data /var/lib/nginx/tmp
+chmod -R 755 /var/lib/nginx/tmp
+
 # Set proper permissions
 chown -R www-data:www-data /var/www/html/database /var/www/html/storage
 chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
