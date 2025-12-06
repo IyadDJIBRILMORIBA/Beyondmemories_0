@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.4-fpm-alpine
 
 # Install system dependencies
 RUN apk add --no-cache \
@@ -11,7 +11,8 @@ RUN apk add --no-cache \
     unzip \
     nginx \
     supervisor \
-    sqlite
+    sqlite \
+    sqlite-dev
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql pdo_sqlite mbstring exif pcntl bcmath gd
@@ -41,19 +42,10 @@ COPY docker/default.conf /etc/nginx/http.d/default.conf
 # Copy supervisor config
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Create .env from production if not exists
-RUN if [ ! -f .env ]; then cp .env.production .env; fi
-
-# Generate application key if needed
-RUN php artisan key:generate --ansi || true
-
-# Run migrations
-RUN php artisan migrate --force || true
-
-# Optimize Laravel
-RUN php artisan config:cache && \
-    php artisan route:cache
+# Copy entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 8080
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD ["docker-entrypoint.sh"]
