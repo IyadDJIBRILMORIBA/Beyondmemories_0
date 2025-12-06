@@ -22,6 +22,10 @@ php artisan migrate --force || echo "⚠️ Migrations failed, database might al
 echo "🌱 Running database seeders..."
 php artisan db:seed --force || echo "⚠️ Seeders failed or already run"
 
+# Create storage symlink
+echo "🔗 Creating storage symlink..."
+php artisan storage:link || echo "⚠️ Symlink already exists"
+
 # Cache config for better performance
 echo "⚡ Optimizing Laravel..."
 php artisan config:cache || true
