@@ -11,6 +11,7 @@ class Memory extends Model
 
     protected $fillable = [
         'user_id',
+        'device_id',
         'path',
         'type',
         'taken_at',

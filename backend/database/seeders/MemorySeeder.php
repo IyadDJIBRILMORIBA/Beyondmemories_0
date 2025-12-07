@@ -55,7 +55,10 @@ class MemorySeeder extends Seeder
             $placeholderPng = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==');
             Storage::disk('public')->put($memory['path'], $placeholderPng);
             
-            Memory::create(array_merge($memory, ['user_id' => 1]));
+            Memory::create(array_merge($memory, [
+                'user_id' => 1,
+                'device_id' => '00000000-0000-0000-0000-000000000000' // Device de démo
+            ]));
         }
 
         // Créer une parcelle exemple
