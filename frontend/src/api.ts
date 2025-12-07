@@ -1,3 +1,5 @@
+import { getDeviceId } from './deviceId';
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api';
 
 export interface Memory {
@@ -37,6 +39,7 @@ class API {
     const formData = new FormData();
     files.forEach(file => formData.append('files[]', file));
     
+    formData.append('device_id', getDeviceId());
     if (takenAt) formData.append('taken_at', takenAt);
     if (name) formData.append('name', name);
     if (description) formData.append('description', description);
@@ -132,9 +135,11 @@ class API {
   // Récupérer tous les souvenirs
   async getMemories(): Promise<{ success: boolean; memories: Memory[] }> {
     try {
-      console.log('📥 Récupération des souvenirs depuis:', `${API_BASE_URL}/memories`);
+      const deviceId = getDeviceId();
+      const url = `${API_BASE_URL}/memories?device_id=${encodeURIComponent(deviceId)}`;
+      console.log('📥 Récupération des souvenirs depuis:', url);
       
-      const response = await fetch(`${API_BASE_URL}/memories`);
+      const response = await fetch(url);
       
       console.log('📡 Statut réponse:', response.status);
       

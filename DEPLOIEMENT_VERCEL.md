@@ -301,4 +301,3 @@ vercel remove [project-name]
 ---
 
 **Bon déploiement ! 🚀**
-azerty

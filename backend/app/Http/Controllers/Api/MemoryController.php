@@ -31,6 +31,7 @@ class MemoryController extends Controller
                 'taken_at' => 'nullable|date|before_or_equal:today',
                 'name' => 'nullable|string|max:255',
                 'description' => 'nullable|string',
+                'device_id' => 'required|string|size:36', // UUID
             ]);
 
             // Vérifier que des fichiers ont été envoyés
@@ -45,6 +46,7 @@ class MemoryController extends Controller
             $takenAt = $request->input('taken_at');
             $name = $request->input('name');
             $description = $request->input('description');
+            $deviceId = $request->input('device_id');
 
             // Convertir la date si elle existe
             $parsedDate = null;
@@ -76,7 +78,8 @@ class MemoryController extends Controller
 
                 // Créer l'entrée dans la DB
                 $memory = Memory::create([
-                    'user_id' => 1, // En dur pour le prototype
+                    'user_id' => 1, // Gardé pour compatibilité
+                    'device_id' => $deviceId,
                     'path' => $path,
                     'type' => $type,
                     'taken_at' => $parsedDate,
@@ -123,11 +126,20 @@ class MemoryController extends Controller
 
     /**
      * Récupérer tous les souvenirs principaux (sans parent_id)
-     * GET /api/memories
+     * GET /api/memories?device_id={uuid}
      */
-    public function index()
+    public function index(Request $request)
     {
-        $memories = Memory::where('user_id', 1)
+        $deviceId = $request->query('device_id');
+        
+        if (!$deviceId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'device_id requis',
+            ], 422);
+        }
+        
+        $memories = Memory::where('device_id', $deviceId)
             ->whereNull('parent_id') // Uniquement les souvenirs principaux
             ->orderBy('created_at', 'desc')
             ->get()
